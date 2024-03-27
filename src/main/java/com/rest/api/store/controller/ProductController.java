@@ -2,15 +2,17 @@ package com.rest.api.store.controller;
 
 import com.rest.api.store.entity.Product;
 import com.rest.api.store.service.ProductService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
+
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
+
 
 @RequiredArgsConstructor
 @RestController
@@ -20,15 +22,21 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<List<Product>> getAllProducts() {
-        // Implement endpoint to get all products
-        // Return appropriate HTTP status codes and response
-        return null;
+
+        return ResponseEntity.status(OK)
+                .body(productService.getAllProducts());
     }
 
     @GetMapping("/{productId}")
-    public ResponseEntity<Product> getProductById(@PathVariable UUID productId) {
-        // Implement endpoint to get product by ID
-        // Return appropriate HTTP status codes and response
-        return null;
+    public ResponseEntity<Product> getProductById(@PathVariable Long productId) {
+
+        return ResponseEntity.status(OK)
+                .body(productService.getProductById(productId));
+    }
+
+    @PostMapping
+    public ResponseEntity<?> addProduct(@Valid @RequestBody  Product product) {
+         productService.addProduct(product);
+        return ResponseEntity.status(CREATED).build();
     }
 }
