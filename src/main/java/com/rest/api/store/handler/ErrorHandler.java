@@ -52,13 +52,17 @@ public class ErrorHandler {
     @ExceptionHandler(StoreInvalidCredentialsException.class)
     public ResponseEntity<Object> handleStoreAccessStoreInvalidCredentialsException(Exception ex) {
         log.warn("Exception intercepted: caused by " + ex);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Invalid username/password!"));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Invalid customername/password!"));
     }
 
-    @ExceptionHandler(UserAlreadyExistsException.class)
-    public ResponseEntity<Object> handleUserAlreadyExistsException(Exception ex) {
-        log.warn("User already exists " + ex);
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse("User already exists!"));
+    @ExceptionHandler(CustomerAlreadyExistsException.class)
+    public ResponseEntity<Object> handleCustomerAlreadyExistsException(Exception ex) {
+        log.warn("Customer already exists " + ex);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse("Customer already exists!"));
     }
-
+    @ExceptionHandler(ProductUnavailableException.class)
+    public ResponseEntity<Object> handleProductUnavailableException(Exception ex) {
+        log.warn("Product is unavailable " + ex);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("Product is unavailable!"));
+    }
 }
