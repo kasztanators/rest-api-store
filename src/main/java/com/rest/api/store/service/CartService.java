@@ -1,35 +1,43 @@
 package com.rest.api.store.service;
 
+import com.rest.api.store.dto.AddProductToCartDTO;
 import com.rest.api.store.entity.Cart;
 import com.rest.api.store.entity.Product;
-import com.rest.api.store.entity.User;
+import com.rest.api.store.entity.Customer;
+import com.rest.api.store.exception.ProductUnavailableException;
 import com.rest.api.store.repository.CartRepository;
+import com.rest.api.store.repository.CustomerRepository;
+import com.rest.api.store.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
+import java.util.Optional;
+
 
 @Service
 @RequiredArgsConstructor
 
 
 public class CartService {
-    private CartRepository cartRepository;
+    private final CartRepository cartRepository;
+    private final ProductRepository productRepository;
+    private final CustomerRepository customerRepository;
 
-    public Cart createCart(User user) {
-        Cart cart = new Cart();
-        cart.setUser(user);
-        return cartRepository.save(cart);
+    public String checkout(Authentication authentication){
+
+        return "Checkout was done successfully!";
+
+    }
+    public void addToCart(AddProductToCartDTO addProductToCartDTO, Authentication authentication) {
+        Optional<Product> product = productRepository.findById(addProductToCartDTO.productID());
+        if (product.isEmpty() || product.get().getQuantityAvailable() < addProductToCartDTO.quantity()){
+            throw new ProductUnavailableException("Product is unavailable!!!");
+        }
+      //  cart.getProducts().add(product);
+        cartRepository.save(new Cart());
     }
 
-    public Cart getCartByUserId(UUID userId) {
-        return cartRepository.findByUserId(userId).get();
+    public void modifyProductInCart(Long id, AddProductToCartDTO addProductToCartDTO, Authentication authentication) {
     }
-
-    public void addToCart(Cart cart, Product product) {
-        cart.getProducts().add(product);
-        cartRepository.save(cart);
-    }
-
-    // Implement other cart operations like removeItemFromCart, updateCartItem, etc.
 }
