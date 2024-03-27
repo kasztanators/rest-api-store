@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 import static jakarta.persistence.CascadeType.*;
 import static jakarta.persistence.FetchType.EAGER;
 
-@Table(name = "CUSTOMER")
+@Table(name = "customers")
 @Entity
 @NoArgsConstructor
 @Getter
@@ -25,7 +25,7 @@ public class Customer implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "customer_id")
-    private Long customerID;
+    private Long id;
 
     @Column(name = "email", nullable = false, unique = true)
     private String email;
@@ -50,6 +50,10 @@ public class Customer implements Serializable {
     @OneToMany(cascade = {PERSIST, MERGE, REMOVE}, fetch = EAGER, mappedBy = "customer", orphanRemoval = true)
     private Set<Role> roles = new HashSet<>();
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "cart_id")
+    private Cart cart;
+
     public void addRole(Role role) {
         this.roles.add(role);
         role.setCustomer(this);
@@ -58,37 +62,9 @@ public class Customer implements Serializable {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this
                 .roles
-                .stream() //
+                .stream()
                 .map(role -> new SimpleGrantedAuthority(role.getRoleEnum().toString()))
                 .collect(Collectors.toSet());
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Customer customer)) return false;
-        return isEnabled() == customer.isEnabled()
-                && isCredentialsNonExpired() == customer.isCredentialsNonExpired()
-                && isAccountNonExpired() == customer.isAccountNonExpired()
-                && isLocked() == customer.isLocked()
-                && Objects.equals(getCustomerID(), customer.getCustomerID())
-                && Objects.equals(getEmail(), customer.getEmail())
-                && Objects.equals(getPassword(), customer.getPassword())
-                && Objects.equals(getRoles(), customer.getRoles());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(
-                getCustomerID(),
-                getEmail(),
-                getPassword(),
-                isEnabled(),
-                isCredentialsNonExpired(),
-                isAccountNonExpired(),
-                isLocked(),
-                getRoles()
-        );
     }
 
 }

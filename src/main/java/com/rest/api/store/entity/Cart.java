@@ -8,15 +8,14 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "cart")
+@Table(name = "carts")
 public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column (name = "cart_id", updatable = false, nullable = false)
-    private Long cartID;
-    @ManyToOne
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
+    private Long id;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Product> products;
+    @OneToOne(mappedBy = "cart")
+    private Customer customer;
 }
