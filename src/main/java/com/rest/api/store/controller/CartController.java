@@ -1,33 +1,48 @@
 package com.rest.api.store.controller;
 
-import com.rest.api.store.entity.Cart;
+import com.rest.api.store.dto.AddProductToCartDTO;
 import com.rest.api.store.service.CartService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
+import static org.springframework.http.HttpStatus.OK;
+
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/carts")
+@RequestMapping("/api")
 public class CartController {
 
     private final CartService cartService;
 
-    @PostMapping("/{userId}")
-    public ResponseEntity<Cart> createCart(@PathVariable UUID userId) {
-        // Implement endpoint to create a cart for a user
-        // Return appropriate HTTP status codes and response
-        return null;
+    @PostMapping("/cart/add")
+    public ResponseEntity<?> addToCart(@Valid @RequestBody AddProductToCartDTO addProductToCartDTO,
+                                       Authentication authentication) {
+        cartService.addToCart(addProductToCartDTO, authentication);
+        return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<Cart> getCartByUserId(@PathVariable UUID userId) {
-        // Implement endpoint to get the cart of a user
-        // Return appropriate HTTP status codes and response
-        return null;
+    @PutMapping("/cart/{id}")
+    public ResponseEntity<?> modifyCartProduct(@PathVariable Long id,
+                                               @RequestBody AddProductToCartDTO addProductToCartDTO,
+                                               Authentication authentication) {
+        cartService.modifyProductInCart(id, addProductToCartDTO, authentication);
+        return ResponseEntity.ok().build();
     }
 
-    // Implement other cart-related endpoints as needed
+    @GetMapping("/cart")
+    public ResponseEntity<?> getCartContent(@Valid @RequestBody AddProductToCartDTO addProductToCartDTO,
+                                            Authentication authentication) {
+        cartService.addToCart(addProductToCartDTO, authentication);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/checkout")
+    public ResponseEntity<String> checkoutCart(Authentication authentication) {
+        return ResponseEntity.status(OK)
+                .body(cartService.checkout(authentication));
+    }
 }

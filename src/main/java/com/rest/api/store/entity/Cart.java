@@ -4,19 +4,19 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.List;
-import java.util.UUID;
+
 
 @Data
 @Entity
-@Table(name = "carts")
+@Table(name = "cart")
 public class Cart {
     @Id
-    @GeneratedValue
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column (name = "cart_id", updatable = false, nullable = false)
+    private Long cartID;
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Product> products;
-
 }
