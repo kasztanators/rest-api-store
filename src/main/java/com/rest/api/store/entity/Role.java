@@ -8,7 +8,7 @@ import lombok.Setter;
 
 import java.io.Serializable;
 
-@Table(name = "ROLE")
+@Table(name = "role")
 @Entity
 @NoArgsConstructor
 @Getter
@@ -17,7 +17,7 @@ public class Role implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column (name = "role_id", updatable = false, nullable = false)
+    @Column(name = "roleID", updatable = false, nullable = false)
     private Long roleID;
 
     @Column(name = "role")
@@ -26,12 +26,12 @@ public class Role implements Serializable {
 
     @ManyToOne
     @JoinColumn(
-            name = "user_id",
+            name = "customer_id",
             nullable = false,
-            referencedColumnName = "user_id",
-            foreignKey = @ForeignKey(name = "role_user_fk")
+            referencedColumnName = "customer_id",
+            foreignKey = @ForeignKey(name = "role_customer_fk")
     )
-    private User user;
+    private Customer customer;
 
     public Role(RoleEnum roleEnum) {
         this.roleEnum = roleEnum;

@@ -1,22 +1,20 @@
 package com.rest.api.store.entity;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.util.UUID;
+
 
 @Data
 @Entity
-@Table(name = "products")
+@Table(name = "product")
 public class Product {
     @Id
-    @GeneratedValue
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column (name = "product_id", updatable = false, nullable = false)
+    private Long productID;
     private String title;
     private BigDecimal price;
     private Integer quantityAvailable;
