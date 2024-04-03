@@ -1,6 +1,7 @@
 package com.rest.api.store.service;
 
 import com.rest.api.store.dto.AuthDTO;
+import com.rest.api.store.entity.Cart;
 import com.rest.api.store.entity.Customer;
 import com.rest.api.store.exception.CustomerAlreadyExistsException;
 import com.rest.api.store.repository.CustomerRepository;
@@ -22,6 +23,7 @@ import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.session.data.redis.RedisIndexedSessionRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -74,6 +76,7 @@ public class AuthService {
         customer.setAccountNonExpired(true);
         customer.setCredentialsNonExpired(true);
         customer.setEnabled(true);
+        customer.setCart( new Cart());
         customerRepository.save(customer);
         return "Registered successfully!";
     }
