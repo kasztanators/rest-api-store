@@ -1,6 +1,7 @@
 package com.rest.api.store.controller;
 
 import com.rest.api.store.dto.AddProductToCartDTO;
+import com.rest.api.store.dto.GetCartDTO;
 import com.rest.api.store.service.CartService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,25 +20,21 @@ public class CartController {
     private final CartService cartService;
 
     @PostMapping("/cart/add")
-    public ResponseEntity<?> addToCart(@Valid @RequestBody AddProductToCartDTO addProductToCartDTO,
-                                       Authentication authentication) {
-        cartService.addToCart(addProductToCartDTO, authentication);
+    public ResponseEntity<?> addToCart(@Valid @RequestBody AddProductToCartDTO addProductToCartDTO) {
+        cartService.addToCart(addProductToCartDTO);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/cart/{id}")
     public ResponseEntity<?> modifyCartProduct(@PathVariable Long id,
-                                               @RequestBody AddProductToCartDTO addProductToCartDTO,
-                                               Authentication authentication) {
-        cartService.modifyProductInCart(id, addProductToCartDTO, authentication);
+                                               @RequestBody AddProductToCartDTO addProductToCartDTO) {
+        cartService.modifyProductInCart(id, addProductToCartDTO);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/cart")
-    public ResponseEntity<?> getCartContent(@Valid @RequestBody AddProductToCartDTO addProductToCartDTO,
-                                            Authentication authentication) {
-        cartService.addToCart(addProductToCartDTO, authentication);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<GetCartDTO> getCartContent() {
+        return ResponseEntity.status(OK).body(cartService.getCartResponse());
     }
 
     @PostMapping("/checkout")

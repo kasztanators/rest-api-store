@@ -23,7 +23,7 @@ public class AuthController {
 
     @GetMapping(path = "/customer")
     public String checkAuthentication(Authentication authentication) {
-        return "An Admin or Customer can hit this rout. Employees name is " + authentication.getName();
+        return "An Admin or Customer can hit this rout. Customer mail is " + authentication.getName();
     }
 
     @GetMapping(path = "/authenticated")
@@ -44,6 +44,7 @@ public class AuthController {
             HttpServletRequest request,
             HttpServletResponse response
     ) {
+        System.out.println(authDTO);
         return new ResponseEntity<>(authService.login(authDTO, request, response), OK);
     }
 }

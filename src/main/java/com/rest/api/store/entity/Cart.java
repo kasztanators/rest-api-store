@@ -14,7 +14,7 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column (name = "cart_id", updatable = false, nullable = false)
     private Long id;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private List<Product> products;
     @OneToOne(mappedBy = "cart")
     private Customer customer;
