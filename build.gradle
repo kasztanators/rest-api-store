@@ -27,6 +27,7 @@ dependencies {
 	implementation 'mysql:mysql-connector-java:5.1.39'
 
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	implementation 'org.codehaus.jackson:jackson-mapper-asl:1.9.13'
 
 	implementation 'org.springframework.session:spring-session-data-redis:3.2.1'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'

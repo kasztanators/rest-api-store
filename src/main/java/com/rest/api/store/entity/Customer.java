@@ -6,11 +6,14 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.codehaus.jackson.annotate.JsonManagedReference;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static jakarta.persistence.CascadeType.*;
@@ -49,8 +52,8 @@ public class Customer implements Serializable {
     @JsonIgnore
     @OneToMany(cascade = {PERSIST, MERGE, REMOVE}, fetch = EAGER, mappedBy = "customer", orphanRemoval = true)
     private Set<Role> roles = new HashSet<>();
-
-    @OneToOne(cascade = CascadeType.ALL)
+    @JsonManagedReference
+    @OneToOne(cascade = CascadeType.ALL, fetch = EAGER)
     @JoinColumn(name = "cart_id")
     private Cart cart;
 

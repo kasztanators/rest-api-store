@@ -20,8 +20,6 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-
-
 public class CartService {
     private final CartRepository cartRepository;
     private final ProductRepository productRepository;
@@ -37,9 +35,7 @@ public class CartService {
         if (product.isEmpty() || product.get().getQuantityAvailable() < addProductToCartDTO.quantity()){
             throw new ProductUnavailableException("Product is unavailable!!!");
         }
-
         Cart cart = getCart();
-
 
         List<Product> products = cart.getProducts();
         Product productToBeAdded  = product.get();
@@ -55,13 +51,6 @@ public class CartService {
     private Cart getCart() {
         Customer loggedCustomer = customerService.getLoggedCustomer();
         Cart cart = loggedCustomer.getCart();
-        if (cart == null){
-            cart = new Cart();
-            cart.setProducts(new ArrayList<>());
-            cart.setCustomer(loggedCustomer);
-            customerService.setCustomerCart(loggedCustomer, cart);
-        }
-
         return cart;
     }
 
