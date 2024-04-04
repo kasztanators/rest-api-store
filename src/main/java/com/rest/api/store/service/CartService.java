@@ -9,10 +9,10 @@ import com.rest.api.store.entity.Product;
 import com.rest.api.store.repository.CartRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -23,7 +23,7 @@ public class CartService {
     private final CustomerService customerService;
     private final CartProductService cartProductService;
 
-    public String checkout(Authentication authentication) {
+    public String checkout() {
 
         return "Checkout was done successfully!";
 
@@ -47,8 +47,28 @@ public class CartService {
         cartRepository.save(cart);
     }
 
-    public void modifyProductInCart(Long id, AddProductToCartDTO addProductToCartDTO) {
+    public void modifyProductInCart(AddProductToCartDTO addProductToCartDTO) {
+        Cart cart = getCart();
+        Optional<CartProduct> cartProductOptional = cartProductService
+                .findCartProductById(cart, addProductToCartDTO.productID());
+
+        if (cartProductOptional.isPresent()) {
+            CartProduct cartProduct = cartProductOptional.get();
+            Integer oldQuantity = cartProduct.getQuantity();
+            Integer newQuantity = addProductToCartDTO.quantity();
+
+            Product product = productService.getProductById(addProductToCartDTO.productID());
+            productService.checkProductAvailability(
+                    product,
+                    newQuantity - oldQuantity);
+            productService.updateProductQuantity(product, newQuantity - oldQuantity);
+            cartProduct.setQuantity(newQuantity);
+            cartRepository.save(cart);
+        } else {
+            addToCart(addProductToCartDTO);
+        }
     }
+
 
     private Cart getCart() {
         Customer loggedCustomer = customerService.getLoggedCustomer();
@@ -58,9 +78,12 @@ public class CartService {
 
     public GetCartDTO getCartResponse() {
         Cart cart = getCart();
+
         return GetCartDTO.builder()
-                .cartId(cart.getId())
-                .productList(cart.getProducts()).build();
+                .productList(cart.getProducts()
+                        .stream()
+                        .map(cartProductService::MapCartProductToGetCartProductDTO)
+                        .toList()).build();
     }
 
 }

@@ -6,7 +6,6 @@ import com.rest.api.store.service.CartService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.HttpStatus.OK;
@@ -25,10 +24,9 @@ public class CartController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/cart/{id}")
-    public ResponseEntity<?> modifyCartProduct(@PathVariable Long id,
-                                               @RequestBody AddProductToCartDTO addProductToCartDTO) {
-        cartService.modifyProductInCart(id, addProductToCartDTO);
+    @PutMapping("/cart/modify")
+    public ResponseEntity<?> modifyCartProduct(@Valid @RequestBody AddProductToCartDTO addProductToCartDTO) {
+        cartService.modifyProductInCart(addProductToCartDTO);
         return ResponseEntity.ok().build();
     }
 
@@ -38,8 +36,8 @@ public class CartController {
     }
 
     @PostMapping("/checkout")
-    public ResponseEntity<String> checkoutCart(Authentication authentication) {
+    public ResponseEntity<String> checkoutCart() {
         return ResponseEntity.status(OK)
-                .body(cartService.checkout(authentication));
+                .body(cartService.checkout());
     }
 }
