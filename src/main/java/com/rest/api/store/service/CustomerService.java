@@ -21,7 +21,7 @@ public class CustomerService {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
         Optional<Customer> customer = customerRepository.findByEmail(email);
-        if (customer.isEmpty()){
+        if (customer.isEmpty()) {
             throw new CustomerNotFoundException("Customer not found!");
         }
         return customer.get();

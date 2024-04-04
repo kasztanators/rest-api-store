@@ -15,6 +15,7 @@ import java.util.List;
 public class ProductDataInitializer {
 
     private final ProductRepository productRepository;
+
     @PostConstruct
     public void initializeData() {
         if (productRepository.count() == 0) {

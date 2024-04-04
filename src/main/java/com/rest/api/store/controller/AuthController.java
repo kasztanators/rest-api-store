@@ -38,13 +38,13 @@ public class AuthController {
                 .status(CREATED)
                 .body(authService.register(authDTO));
     }
+
     @PostMapping(path = "/login")
     public ResponseEntity<?> loginEmployee(
             @Valid @RequestBody AuthDTO authDTO,
             HttpServletRequest request,
             HttpServletResponse response
     ) {
-        System.out.println(authDTO);
         return new ResponseEntity<>(authService.login(authDTO, request, response), OK);
     }
 }

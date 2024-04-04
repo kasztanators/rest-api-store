@@ -23,7 +23,6 @@ import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.session.data.redis.RedisIndexedSessionRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -76,7 +75,7 @@ public class AuthService {
         customer.setAccountNonExpired(true);
         customer.setCredentialsNonExpired(true);
         customer.setEnabled(true);
-        customer.setCart( new Cart());
+        customer.setCart(new Cart());
         customerRepository.save(customer);
         return "Registered successfully!";
     }

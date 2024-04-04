@@ -18,7 +18,7 @@ public class Cart implements Serializable {
     @Column(name = "cart_id", updatable = false, nullable = false)
     private Long id;
     @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-    private List<Product> products;
+    private List<CartProduct> products;
     @ToString.Exclude
     @OneToOne(mappedBy = "cart")
     @JsonBackReference

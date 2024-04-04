@@ -3,45 +3,47 @@ package com.rest.api.store.service;
 import com.rest.api.store.dto.AddProductToCartDTO;
 import com.rest.api.store.dto.GetCartDTO;
 import com.rest.api.store.entity.Cart;
-import com.rest.api.store.entity.Product;
+import com.rest.api.store.entity.CartProduct;
 import com.rest.api.store.entity.Customer;
-import com.rest.api.store.exception.ProductUnavailableException;
+import com.rest.api.store.entity.Product;
 import com.rest.api.store.repository.CartRepository;
-import com.rest.api.store.repository.CustomerRepository;
-import com.rest.api.store.repository.ProductRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 
 @Service
 @RequiredArgsConstructor
 public class CartService {
     private final CartRepository cartRepository;
-    private final ProductRepository productRepository;
+    private final ProductService productService;
     private final CustomerService customerService;
+    private final CartProductService cartProductService;
 
-    public String checkout(Authentication authentication){
+    public String checkout(Authentication authentication) {
 
         return "Checkout was done successfully!";
 
     }
+
+    @Transactional
     public void addToCart(AddProductToCartDTO addProductToCartDTO) {
-        Optional<Product> product = productRepository.findById(addProductToCartDTO.productID());
-        if (product.isEmpty() || product.get().getQuantityAvailable() < addProductToCartDTO.quantity()){
-            throw new ProductUnavailableException("Product is unavailable!!!");
-        }
+        Product product = productService.getProductById(addProductToCartDTO.productID());
+        productService.checkProductAvailability(product, addProductToCartDTO.quantity());
+
         Cart cart = getCart();
+        productService.updateProductQuantity(product, addProductToCartDTO.quantity());
+        CartProduct cartProduct = cartProductService.createCartProduct(product, addProductToCartDTO.quantity());
+        addProductToCart(cart, cartProduct);
+    }
 
-        List<Product> products = cart.getProducts();
-        Product productToBeAdded  = product.get();
-        products.add(productToBeAdded);
+    private void addProductToCart(Cart cart, CartProduct cartProduct) {
+        List<CartProduct> products = cart.getProducts();
+        products.add(cartProduct);
         cart.setProducts(products);
-
         cartRepository.save(cart);
     }
 
@@ -56,7 +58,7 @@ public class CartService {
 
     public GetCartDTO getCartResponse() {
         Cart cart = getCart();
-        return  GetCartDTO.builder()
+        return GetCartDTO.builder()
                 .cartId(cart.getId())
                 .productList(cart.getProducts()).build();
     }

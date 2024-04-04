@@ -23,6 +23,7 @@ public record CustomerDetails(Customer customer) implements UserDetails, Seriali
     public String getUsername() {
         return this.customer.getEmail();
     }
+
     @Override
     public boolean isAccountNonExpired() {
         return this.customer.isAccountNonExpired();
