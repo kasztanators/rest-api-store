@@ -1,5 +1,6 @@
 package com.rest.api.store.config;
 
+import com.rest.api.store.entity.userdetail.CustomerDetailService;
 import com.rest.api.store.security.CustomLogoutHandler;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,7 +26,7 @@ import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.session.Session;
 import org.springframework.session.data.redis.RedisIndexedSessionRepository;
 import org.springframework.session.security.SpringSessionBackedSessionRegistry;
-import com.rest.api.store.entity.userdetail.CustomerDetailService;
+
 import static org.springframework.security.config.http.SessionCreationPolicy.IF_REQUIRED;
 
 @Configuration
@@ -76,7 +77,7 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/api/auth/register", "/api/auth/login").permitAll();
-                    auth.requestMatchers(HttpMethod.GET,"/api/products").permitAll();
+                    auth.requestMatchers(HttpMethod.GET, "/api/products").permitAll();
                     auth.anyRequest().authenticated();
                 })
                 .sessionManagement(sessionManagement -> sessionManagement
