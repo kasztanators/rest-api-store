@@ -1,6 +1,7 @@
 package com.rest.api.store.service;
 
 import com.rest.api.store.dto.AuthDTO;
+import com.rest.api.store.entity.Cart;
 import com.rest.api.store.entity.Customer;
 import com.rest.api.store.exception.CustomerAlreadyExistsException;
 import com.rest.api.store.repository.CustomerRepository;
@@ -74,6 +75,7 @@ public class AuthService {
         customer.setAccountNonExpired(true);
         customer.setCredentialsNonExpired(true);
         customer.setEnabled(true);
+        customer.setCart(new Cart());
         customerRepository.save(customer);
         return "Registered successfully!";
     }

@@ -23,7 +23,7 @@ public class AuthController {
 
     @GetMapping(path = "/customer")
     public String checkAuthentication(Authentication authentication) {
-        return "An Admin or Customer can hit this rout. Employees name is " + authentication.getName();
+        return "An Admin or Customer can hit this rout. Customer mail is " + authentication.getName();
     }
 
     @GetMapping(path = "/authenticated")
@@ -38,6 +38,7 @@ public class AuthController {
                 .status(CREATED)
                 .body(authService.register(authDTO));
     }
+
     @PostMapping(path = "/login")
     public ResponseEntity<?> loginEmployee(
             @Valid @RequestBody AuthDTO authDTO,

@@ -8,7 +8,7 @@ import lombok.Setter;
 
 import java.io.Serializable;
 
-@Table(name = "role")
+@Table(name = "roles")
 @Entity
 @NoArgsConstructor
 @Getter
@@ -17,8 +17,8 @@ public class Role implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "roleID", updatable = false, nullable = false)
-    private Long roleID;
+    @Column(name = "role_id", updatable = false, nullable = false)
+    private Long id;
 
     @Column(name = "role")
     @Enumerated(value = EnumType.STRING)
@@ -36,5 +36,4 @@ public class Role implements Serializable {
     public Role(RoleEnum roleEnum) {
         this.roleEnum = roleEnum;
     }
-
 }
