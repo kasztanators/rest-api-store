@@ -4,7 +4,6 @@ import com.rest.api.store.entity.Product;
 import com.rest.api.store.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,8 +34,8 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addProduct(@Valid @RequestBody  Product product) {
-         productService.addProduct(product);
+    public ResponseEntity<?> addProduct(@Valid @RequestBody Product product) {
+        productService.addProduct(product);
         return ResponseEntity.status(CREATED).build();
     }
 }

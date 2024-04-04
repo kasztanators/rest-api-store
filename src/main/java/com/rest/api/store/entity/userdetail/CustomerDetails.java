@@ -4,10 +4,11 @@ import com.rest.api.store.entity.Customer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Objects;
 
-public record CustomerDetails(Customer customer) implements UserDetails {
+public record CustomerDetails(Customer customer) implements UserDetails, Serializable {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.customer.getAuthorities();
@@ -22,6 +23,7 @@ public record CustomerDetails(Customer customer) implements UserDetails {
     public String getUsername() {
         return this.customer.getEmail();
     }
+
     @Override
     public boolean isAccountNonExpired() {
         return this.customer.isAccountNonExpired();

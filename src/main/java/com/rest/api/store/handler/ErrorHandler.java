@@ -60,6 +60,7 @@ public class ErrorHandler {
         log.warn("Customer already exists " + ex);
         return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse("Customer already exists!"));
     }
+
     @ExceptionHandler(ProductUnavailableException.class)
     public ResponseEntity<Object> handleProductUnavailableException(Exception ex) {
         log.warn("Product is unavailable " + ex);
