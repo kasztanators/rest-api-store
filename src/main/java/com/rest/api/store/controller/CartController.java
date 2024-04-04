@@ -2,9 +2,11 @@ package com.rest.api.store.controller;
 
 import com.rest.api.store.dto.AddProductToCartDTO;
 import com.rest.api.store.dto.GetCartDTO;
+import com.rest.api.store.exception.CartIsEmptyException;
 import com.rest.api.store.service.CartService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,8 +39,12 @@ public class CartController {
 
     @PostMapping("/checkout")
     public ResponseEntity<String> checkoutCart() {
-        return ResponseEntity.status(OK)
-                .body(cartService.checkout());
+        try {
+            cartService.checkout();
+            return ResponseEntity.ok().build();
+        } catch (CartIsEmptyException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cart is empty");
+        }
     }
 
     @DeleteMapping("cart/{id}")

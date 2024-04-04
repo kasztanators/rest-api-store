@@ -6,6 +6,7 @@ import com.rest.api.store.entity.Cart;
 import com.rest.api.store.entity.CartProduct;
 import com.rest.api.store.entity.Customer;
 import com.rest.api.store.entity.Product;
+import com.rest.api.store.exception.CartIsEmptyException;
 import com.rest.api.store.exception.ProductUnavailableException;
 import com.rest.api.store.repository.CartRepository;
 import jakarta.transaction.Transactional;
@@ -24,10 +25,13 @@ public class CartService {
     private final CustomerService customerService;
     private final CartProductService cartProductService;
 
-    public String checkout() {
-
-        return "Checkout was done successfully!";
-
+    public void checkout() throws CartIsEmptyException {
+        Cart cart = getCart();
+        if (cart.getProducts().isEmpty() || cart.getProducts() == null) {
+            throw new CartIsEmptyException();
+        }
+        List<CartProduct> products = cart.getProducts();
+        products.forEach(p -> removeFromCart(p.getProduct_id()));
     }
 
     @Transactional
@@ -48,6 +52,7 @@ public class CartService {
         cartRepository.save(cart);
     }
 
+    @Transactional
     public void modifyProductInCart(AddProductToCartDTO addProductToCartDTO) {
         Cart cart = getCart();
         Optional<CartProduct> cartProductOptional = cartProductService
@@ -87,6 +92,7 @@ public class CartService {
                         .toList()).build();
     }
 
+    @Transactional
     public void removeFromCart(Long id) {
         Cart cart = getCart();
         Optional<CartProduct> cartProductOptional = cartProductService
