@@ -40,4 +40,10 @@ public class CartController {
         return ResponseEntity.status(OK)
                 .body(cartService.checkout());
     }
+
+    @DeleteMapping("cart/{id}")
+    public ResponseEntity<?> removeProductFromCart(@PathVariable Long id) {
+        cartService.removeFromCart(id);
+        return ResponseEntity.ok().build();
+    }
 }

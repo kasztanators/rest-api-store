@@ -6,6 +6,7 @@ import com.rest.api.store.entity.Cart;
 import com.rest.api.store.entity.CartProduct;
 import com.rest.api.store.entity.Customer;
 import com.rest.api.store.entity.Product;
+import com.rest.api.store.exception.ProductUnavailableException;
 import com.rest.api.store.repository.CartRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -61,7 +62,7 @@ public class CartService {
             productService.checkProductAvailability(
                     product,
                     newQuantity - oldQuantity);
-            productService.updateProductQuantity(product, newQuantity - oldQuantity);
+            productService.updateProductQuantity(product, (newQuantity - oldQuantity));
             cartProduct.setQuantity(newQuantity);
             cartRepository.save(cart);
         } else {
@@ -86,4 +87,18 @@ public class CartService {
                         .toList()).build();
     }
 
+    public void removeFromCart(Long id) {
+        Cart cart = getCart();
+        Optional<CartProduct> cartProductOptional = cartProductService
+                .findCartProductById(cart, id);
+        if (cartProductOptional.isPresent()) {
+            CartProduct cartProduct = cartProductOptional.get();
+            Product product = productService.getProductById(cartProduct.getProduct_id());
+            productService.updateProductQuantity(product, cartProduct.getQuantity() * -1);
+            cart.getProducts().remove(cartProduct);
+            cartRepository.save(cart);
+        } else {
+            throw new ProductUnavailableException("No such a product inside cart");
+        }
+    }
 }
