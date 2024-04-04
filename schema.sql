@@ -1,3 +1,11 @@
+create table cart_products
+(
+    quantity        integer,
+    cart_product_id bigserial not null,
+    product_id      bigint    not null,
+    primary key (cart_product_id)
+);
+
 create table carts
 (
     cart_id bigserial not null,
@@ -6,8 +14,8 @@ create table carts
 
 create table carts_products
 (
-    cart_cart_id        bigint not null,
-    products_product_id bigint not null unique
+    cart_cart_id             bigint not null,
+    products_cart_product_id bigint not null unique
 );
 
 create table customers
@@ -41,9 +49,9 @@ create table roles
 );
 
 alter table if exists carts_products
-    add constraint FKkjflqlmg69rknq1i79uvaj265
-        foreign key (products_product_id)
-            references products;
+    add constraint FKhlf6ykg255bee1d1p0so9378i
+        foreign key (products_cart_product_id)
+            references cart_products;
 
 alter table if exists carts_products
     add constraint FK9hfmdik2aam15udyoqdf4819
