@@ -1,0 +1,69 @@
+admin:
+    email: admin@admin.com
+custom:
+    max:
+        session: 1
+logging:
+    level:
+        org:
+            hibernate: ERROR
+            springframework:
+                jdbc: TRACE
+                security: TRACE
+server:
+    port: 8080
+    servlet:
+        session:
+            cookie:
+                domain: localhost
+                http-only: true
+                max-age: 600
+                name: JSESSIONID
+                path: /
+                same-site: strict
+                secure: false
+            timeout: 1m
+            tracking-modes: cookie
+spring:
+    data:
+        redis:
+            host: localhost
+            password: session
+            port: 6379
+            url: redis://localhost:6379
+    datasource:
+        initialize: false
+        password: postgres
+        url: jdbc:postgresql://localhost:5432/postgres
+        username: postgres
+    jpa:
+        database-platform: org.hibernate.dialect.PostgreSQLDialect
+        defer-datasource-initialization: true
+        generate-ddl: true
+        hibernate:
+            ddl-auto: create-drop
+        open-in-view: false
+        properties:
+            hibernate:
+                format_sql: true
+            jakarta:
+                persistence:
+                    sharedCache:
+                        mode: ALL
+            javax:
+                persistence:
+                    schema-generation:
+                        scripts:
+                            action: create
+                            create-source: metadata
+                            create-target: create.sql
+    session:
+        redis:
+            cleanup-cron: 0 * * * * *
+            flush-mode: on_save
+            namespace: spring:session
+        timeout: 1m
+    sql:
+        init:
+            continue-on-error: true
+            mode: always

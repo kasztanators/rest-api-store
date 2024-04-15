@@ -12,14 +12,6 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
 import org.springframework.session.web.context.AbstractHttpSessionApplicationInitializer;
 
 
-/**
- * The @EnableRedisIndexedHttpSession annotation creates a Spring Bean with the name of springSessionRepositoryFilter that
- * implements Filter. The filter is in charge of replacing the HttpSession implementation to be backed by Spring Session.
- * In this instance, Spring Session is backed by RedisIndexedSessionRepository.
- * For more info
- * <a href="https://github.com/spring-projects/spring-session/issues/2235">...</a>
- * <a href="https://docs.spring.io/spring-session/reference/http-session.html#httpsession">...</a>
- */
 @Configuration
 @EnableRedisIndexedHttpSession
 @Slf4j
