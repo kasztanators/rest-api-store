@@ -112,17 +112,17 @@ This document outlines the design and functionality of a RESTful API for a store
 
 ## Optional Functionality
 
-### 1. Preventing Intruder Brute Forcing -- we can do
+### 1. Preventing Intruder Brute Forcing
 
 - Implement rate limiting or CAPTCHA verification to prevent brute force attacks on login endpoints.
 
-### 2. Reset Password -- we can do
+### 2. Reset Password
 - Implement a password reset functionality with email verification.
 
-### 3. Cancel Order -- we can do /// transactional DB
+### 3. Cancel Order
 - Allow users to cancel orders and return products back to available status.
 
-### 4. Get User's Order List --- booring
+### 4. Get User's Order List
 - Provide an endpoint to retrieve a user's order history including order ID, date, total, and status.
 
 ## Conclusion
