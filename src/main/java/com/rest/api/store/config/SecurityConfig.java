@@ -36,13 +36,9 @@ public class SecurityConfig {
 
     @Value(value = "${custom.max.session}")
     private int maxSession;
-
     private final RedisIndexedSessionRepository redisIndexedSessionRepository;
-
     private final PasswordEncoder passwordEncoder;
-
     private final AuthenticationEntryPoint authEntryPoint;
-
     private final CustomerDetailService detailService;
 
     public SecurityConfig(
@@ -81,15 +77,15 @@ public class SecurityConfig {
                     auth.anyRequest().authenticated();
                 })
                 .sessionManagement(sessionManagement -> sessionManagement
-                        .sessionCreationPolicy(IF_REQUIRED) //
-                        .sessionFixation(SessionManagementConfigurer.SessionFixationConfigurer::newSession) //
-                        .maximumSessions(maxSession) //
+                        .sessionCreationPolicy(IF_REQUIRED)
+                        .sessionFixation(SessionManagementConfigurer.SessionFixationConfigurer::newSession)
+                        .maximumSessions(maxSession)
                         .sessionRegistry(sessionRegistry())
                 )
                 .exceptionHandling((ex) -> ex.authenticationEntryPoint(this.authEntryPoint))
                 .logout(out -> out
                         .logoutUrl("/api/auth/logout")
-                        .invalidateHttpSession(true) // Invalidate all sessions after logout
+                        .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
                         .addLogoutHandler(new CustomLogoutHandler(this.redisIndexedSessionRepository))
                         .logoutSuccessHandler((request, response, authentication) ->
@@ -99,18 +95,13 @@ public class SecurityConfig {
                 .build();
     }
 
-    /**
-     * Maintains a registry of Session information instances. For better understanding visit
-     * <a href="https://github.com/spring-projects/spring-session/blob/main/spring-session-docs/modules/ROOT/examples/java/docs/security/SecurityConfiguration.java">...</a>
-     **/
+
     @Bean
     public SpringSessionBackedSessionRegistry<? extends Session> sessionRegistry() {
         return new SpringSessionBackedSessionRegistry<>(this.redisIndexedSessionRepository);
     }
 
-    /**
-     * A SecurityContextRepository implementation which stores the security context in the HttpSession between requests.
-     */
+
     @Bean
     public SecurityContextRepository securityContextRepository() {
         return new HttpSessionSecurityContextRepository();

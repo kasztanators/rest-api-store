@@ -18,7 +18,6 @@ import static org.springframework.http.HttpStatus.OK;
 @RestController
 @RequestMapping(path = "/api/auth")
 public class AuthController {
-
     private final AuthService authService;
 
     @GetMapping(path = "/customer")

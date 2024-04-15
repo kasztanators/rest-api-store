@@ -3,6 +3,8 @@ package com.rest.api.store.service;
 import com.rest.api.store.dto.AuthDTO;
 import com.rest.api.store.entity.Cart;
 import com.rest.api.store.entity.Customer;
+import com.rest.api.store.entity.Role;
+import com.rest.api.store.enumeration.RoleEnum;
 import com.rest.api.store.exception.CustomerAlreadyExistsException;
 import com.rest.api.store.repository.CustomerRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,12 +29,16 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
+import static com.rest.api.store.enumeration.RoleEnum.USER;
+
 @Service
 @Setter
 public class AuthService {
 
     @Value(value = "${custom.max.session}")
     private int maxSession;
+    @Value(value = "${admin.email}")
+    private String adminEmail;
 
     private final PasswordEncoder passwordEncoder;
     private final SecurityContextRepository securityContextRepository;
@@ -76,6 +82,12 @@ public class AuthService {
         customer.setCredentialsNonExpired(true);
         customer.setEnabled(true);
         customer.setCart(new Cart());
+        customer.addRole(new Role(RoleEnum.USER));
+
+        if (adminEmail.equals(email)) {
+            customer.addRole(new Role(RoleEnum.ADMIN));
+        }
+
         customerRepository.save(customer);
         return "Registered successfully!";
     }

@@ -30,8 +30,9 @@ public class CartService {
         if (cart.getProducts().isEmpty() || cart.getProducts() == null) {
             throw new CartIsEmptyException();
         }
-        List<CartProduct> products = cart.getProducts();
-        products.forEach(p -> removeFromCart(p.getProduct_id()));
+        cart.getProducts().clear();
+        cartRepository.save(cart);
+
     }
 
     @Transactional
