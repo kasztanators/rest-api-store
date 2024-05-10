@@ -2,6 +2,7 @@ package com.rest.api.store.controller;
 
 import com.rest.api.store.dto.AddProductToCartDTO;
 import com.rest.api.store.dto.GetCartDTO;
+import com.rest.api.store.dto.OrderDTO;
 import com.rest.api.store.exception.CartIsEmptyException;
 import com.rest.api.store.service.CartService;
 import jakarta.validation.Valid;
@@ -38,12 +39,11 @@ public class CartController {
     }
 
     @PostMapping("/checkout")
-    public ResponseEntity<String> checkoutCart() {
+    public ResponseEntity<OrderDTO> checkoutCart() {
         try {
-            cartService.checkout();
-            return ResponseEntity.ok().build();
+            return ResponseEntity.status(OK).body(cartService.checkout());
         } catch (CartIsEmptyException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cart is empty");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 

@@ -2,6 +2,7 @@ package com.rest.api.store.service;
 
 import com.rest.api.store.dto.AddProductToCartDTO;
 import com.rest.api.store.dto.GetCartDTO;
+import com.rest.api.store.dto.OrderDTO;
 import com.rest.api.store.entity.Cart;
 import com.rest.api.store.entity.CartProduct;
 import com.rest.api.store.entity.Customer;
@@ -24,15 +25,19 @@ public class CartService {
     private final ProductService productService;
     private final CustomerService customerService;
     private final CartProductService cartProductService;
+    private final OrderService orderService;
 
-    public void checkout() throws CartIsEmptyException {
+    public OrderDTO checkout() throws CartIsEmptyException {
         Cart cart = getCart();
+
         if (cart.getProducts().isEmpty() || cart.getProducts() == null) {
             throw new CartIsEmptyException();
         }
+
+        OrderDTO orderDTO = orderService.createOrder(cart.getProducts());
         cart.getProducts().clear();
         cartRepository.save(cart);
-
+        return orderDTO;
     }
 
     @Transactional
