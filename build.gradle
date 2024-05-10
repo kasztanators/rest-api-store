@@ -22,23 +22,32 @@ repositories {
 }
 
 dependencies {
-	implementation 'javax.json:javax.json-api:1.1.4'
-	implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
-	implementation 'mysql:mysql-connector-java:5.1.39'
 
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-	implementation 'org.codehaus.jackson:jackson-mapper-asl:1.9.13'
-
 	implementation 'org.springframework.session:spring-session-data-redis:3.2.1'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+
+	implementation 'javax.json:javax.json-api:1.1.4'
+	implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
+	implementation 'mysql:mysql-connector-java:5.1.39'
+	implementation 'org.codehaus.jackson:jackson-mapper-asl:1.9.13'
+
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+	testImplementation 'junit:junit:4.13.2'
+	testImplementation 'org.assertj:assertj-core:3.25.3'
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.2'
+
+
+
 }
 
 tasks.named('test') {
