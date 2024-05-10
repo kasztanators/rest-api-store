@@ -84,7 +84,7 @@ public class AuthService {
         customer.setCart(new Cart());
         customer.addRole(new Role(RoleEnum.USER));
 
-        if (adminEmail.equals(email)) {
+        if (adminEmail != null && adminEmail.equals(email)) {
             customer.addRole(new Role(RoleEnum.ADMIN));
         }
 

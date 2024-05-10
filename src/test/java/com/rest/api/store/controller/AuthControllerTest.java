@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
 @SpringBootTest
@@ -28,7 +29,7 @@ class AuthControllerTest {
     void register() throws Exception {
         byte[] array = new byte[7];
         new Random().nextBytes(array);
-        String generatedString = new String(array, Charset.forName("UTF-8"));
+        String generatedString = new String(array, StandardCharsets.UTF_8);
         AuthDTO authDTO = new AuthDTO(generatedString, "testReg");
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/register")
@@ -41,7 +42,7 @@ class AuthControllerTest {
     void registerWithConflict() throws Exception {
         byte[] array = new byte[7];
         new Random().nextBytes(array);
-        String generatedString = new String(array, Charset.forName("UTF-8"));
+        String generatedString = new String(array, StandardCharsets.UTF_8);
         AuthDTO authDTO = new AuthDTO(generatedString, "testReg");
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/register")

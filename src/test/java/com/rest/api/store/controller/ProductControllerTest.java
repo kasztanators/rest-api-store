@@ -22,7 +22,8 @@ import java.util.List;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -41,7 +42,7 @@ class ProductControllerTest {
         product.setPrice(BigDecimal.valueOf(10.00));
         product.setTitle("Product 1");
         product.setId(1L);
-        List<Product> products = Arrays.asList(
+        List<Product> products = List.of(
                 product
         );
         when(productService.getAllProducts()).thenReturn(products);

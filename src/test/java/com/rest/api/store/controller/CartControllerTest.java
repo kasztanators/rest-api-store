@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Collections;
 
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
@@ -66,7 +67,7 @@ class CartControllerTest {
     @WithMockUser(username = "user", roles = "CUSTOMER")
     void getCartContent() throws Exception {
         GetCartDTO testCart = GetCartDTO.builder()
-                .productList(Arrays.asList(GetCartProductDTO.builder()
+                .productList(Collections.singletonList(GetCartProductDTO.builder()
                         .id(1L).title("title").quantity(2).build()))
                 .build();
         when(cartService.getCartResponse()).thenReturn(testCart);
