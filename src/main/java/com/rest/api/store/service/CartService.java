@@ -14,6 +14,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,7 +31,7 @@ public class CartService {
     public OrderDTO checkout() throws CartIsEmptyException {
         Cart cart = getCart();
 
-        if (cart.getProducts().isEmpty() || cart.getProducts() == null) {
+        if (cart.getProducts() == null || cart.getProducts().isEmpty()) {
             throw new CartIsEmptyException();
         }
 
@@ -53,6 +54,9 @@ public class CartService {
 
     private void addProductToCart(Cart cart, CartProduct cartProduct) {
         List<CartProduct> products = cart.getProducts();
+        if (cart.getProducts() == null) {
+            products = new ArrayList<>();
+        }
         products.add(cartProduct);
         cart.setProducts(products);
         cartRepository.save(cart);

@@ -20,17 +20,6 @@ import static org.springframework.http.HttpStatus.OK;
 public class AuthController {
     private final AuthService authService;
 
-    @GetMapping(path = "/customer")
-    public String checkAuthentication(Authentication authentication) {
-        return "An Admin or Customer can hit this rout. Customer mail is " + authentication.getName();
-    }
-
-    @GetMapping(path = "/authenticated")
-    @PreAuthorize(value = "hasAuthority('ADMIN')")
-    public String getAuthenticated(Authentication authentication) {
-        return "Admin name is " + authentication.getName();
-    }
-
     @PostMapping(path = "/register")
     public ResponseEntity<?> register(@Valid @RequestBody AuthDTO authDTO) {
         return ResponseEntity
