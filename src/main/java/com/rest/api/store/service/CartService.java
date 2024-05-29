@@ -10,9 +10,10 @@ import com.rest.api.store.entity.Product;
 import com.rest.api.store.exception.CartIsEmptyException;
 import com.rest.api.store.exception.ProductUnavailableException;
 import com.rest.api.store.repository.CartRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,7 @@ public class CartService {
     private final CartProductService cartProductService;
     private final OrderService orderService;
 
+    @Transactional
     public OrderDTO checkout() throws CartIsEmptyException {
         Cart cart = getCart();
 
@@ -41,7 +43,8 @@ public class CartService {
         return orderDTO;
     }
 
-    @Transactional
+    @Transactional(rollbackFor = {IllegalArgumentException.class, ProductUnavailableException.class},
+            isolation = Isolation.REPEATABLE_READ)
     public void addToCart(AddProductToCartDTO addProductToCartDTO) {
         Product product = productService.getProductById(addProductToCartDTO.productID());
         productService.checkProductAvailability(product, addProductToCartDTO.quantity());
@@ -62,7 +65,8 @@ public class CartService {
         cartRepository.save(cart);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = {IllegalArgumentException.class, ProductUnavailableException.class},
+            isolation = Isolation.REPEATABLE_READ)
     public void modifyProductInCart(AddProductToCartDTO addProductToCartDTO) {
         Cart cart = getCart();
         Optional<CartProduct> cartProductOptional = cartProductService
@@ -102,7 +106,8 @@ public class CartService {
                         .toList()).build();
     }
 
-    @Transactional
+    @Transactional(rollbackFor = {IllegalArgumentException.class, ProductUnavailableException.class},
+            isolation = Isolation.REPEATABLE_READ)
     public void removeFromCart(Long id) {
         Cart cart = getCart();
         Optional<CartProduct> cartProductOptional = cartProductService
