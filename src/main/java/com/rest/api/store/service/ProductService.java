@@ -5,6 +5,8 @@ import com.rest.api.store.exception.ProductUnavailableException;
 import com.rest.api.store.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -14,14 +16,17 @@ import java.util.List;
 public class ProductService {
     private final ProductRepository productRepository;
 
+    @Transactional(readOnly = true)
     public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
 
+    @Transactional
     public Product addProduct(Product product) {
         return productRepository.save(product);
     }
 
+    @Transactional(readOnly = true, isolation = Isolation.READ_COMMITTED)
     public Product getProductById(long productId) {
         return productRepository.findById(productId)
                 .orElseThrow(() -> new ProductUnavailableException("Product is unavailable!!!"));
